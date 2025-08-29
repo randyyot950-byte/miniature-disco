@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creepy 3D</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+    #overlay {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: red;
+      font-size: 50px;
+      font-family: "Creepster", cursive, sans-serif;
+      text-shadow: 0 0 20px red, 0 0 40px darkred;
+      animation: flicker 1s infinite;
+    }
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">👁️ HALO OBRY 👁️</div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+  <script>
+    // Setup scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Lampu merah menyeramkan
+    const light = new THREE.PointLight(0xff0000, 3, 100);
+    light.position.set(0, 0, 5);
+    scene.add(light);
+
+    // Tengkorak (pakai bola putih buat simulasi kepala seram)
+    const geometry = new THREE.SphereGeometry(1.5, 32, 32);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6, metalness: 0.1 });
+    const skull = new THREE.Mesh(geometry, material);
+    scene.add(skull);
+
+    // Mata hitam
+    const eyeGeo = new THREE.SphereGeometry(0.3, 16, 16);
+    const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+    const eye1 = new THREE.Mesh(eyeGeo, eyeMat);
+    const eye2 = new THREE.Mesh(eyeGeo, eyeMat);
+    eye1.position.set(-0.6, 0.4, 1.2);
+    eye2.position.set(0.6, 0.4, 1.2);
+    skull.add(eye1);
+    skull.add(eye2);
+
+    camera.position.z = 6;
+
+    // Animasi muter
+    function animate() {
+      requestAnimationFrame(animate);
+      skull.rotation.y += 0.01;
+      skull.rotation.x += 0.005;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Suara creepy
+    const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/6665");
+    audio.loop = true;
+    audio.play();
+  </script>
+</body>
+</html>
